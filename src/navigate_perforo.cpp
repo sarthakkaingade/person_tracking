@@ -98,9 +98,9 @@ void NavigatePerFoRo::navigate(bool trueDetected)
 		} else if ( (AreaRatio < 0.1f) && (TrackedShirt.y > (0.15 * Rows)) && (TrackedShirt.y < (0.85 * Rows)) )	{
 			//cout<<"Go Front"<<endl;
 			msg.command = 1;
-//		} else if ( (AreaRatio > 0.15f) || (TrackedShirt.y < (0.15 * Rows)) )	{
-//			cout<<"Go Back"<<endl;
-//			msg.command = 2;
+		} else if ( (AreaRatio > 0.15f) || (TrackedShirt.y < (0.15 * Rows)) )	{
+			cout<<"Go Back"<<endl;
+			msg.command = 2;
 		} else	{
 			//cout<<"Center"<<endl;
 			msg.command = 0;
