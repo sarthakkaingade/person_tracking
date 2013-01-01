@@ -95,9 +95,12 @@ void NavigatePerFoRo::navigate(bool trueDetected)
 		} else if ((TrackedShirt.x > (0.7 * Columns)) && (TrackedPant.x > (0.7 * Columns)))	{
 			//cout<<"Turn Right"<<endl;
 			msg.command = 4;
-		} else	if ( AreaRatio < 0.1f )	{
+		} else if ( (AreaRatio < 0.1f) && (TrackedShirt.y > (0.15 * Rows)) && (TrackedShirt.y < (0.85 * Rows)) )	{
 			//cout<<"Go Front"<<endl;
 			msg.command = 1;
+//		} else if ( (AreaRatio > 0.15f) || (TrackedShirt.y < (0.15 * Rows)) )	{
+//			cout<<"Go Back"<<endl;
+//			msg.command = 2;
 		} else	{
 			//cout<<"Center"<<endl;
 			msg.command = 0;
