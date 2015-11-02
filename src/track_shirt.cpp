@@ -11,6 +11,7 @@ TrackShirt::TrackShirt() :
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &TrackShirt::ImageCallback, this);
 	target_shirt_sub_ = nh_.subscribe("/SelectTargetShirtPerFoRo", 1, &TrackShirt::SelectTargetShirtCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &TrackShirt::ModeCallback, this);
+	track_shirt_pub_ = nh_.advertise<person_tracking::TrackedObject>("/track_shirt/tracked_shirt", 2);
 	image_shirt_pub_ = it_.advertise("/track_shirt/image_raw", 1);
 
 	structure_elem = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
@@ -246,9 +247,11 @@ void TrackShirt::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 			if (IMSHOW)	{ 
 				rectangle( frame, boundRect[sortedSelect.at<int>(0)], Scalar(255,255,255), 2, 8, 0 );
 			}  
-			navX = selectCentroid.x;
-			navY = selectCentroid.y;
-			cout<<"X="<<navX<<"Y="<<navY<<endl; 
+			shirt_msg.x = selectCentroid.x;
+			shirt_msg.y = selectCentroid.y;
+			shirt_msg.area = boundRect[sortedSelect.at<int>(0)].width * boundRect[sortedSelect.at<int>(0)].height;
+			track_shirt_pub_.publish(shirt_msg);
+			//cout<<"X="<<navX<<"Y="<<navY<<endl; 
 			missCount = 0;
 			drawArrow(frame, cv::Point(frame.cols/2, frame.rows/2), selectCentroid, Scalar(255,0,0));
 		} else	{

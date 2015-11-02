@@ -9,6 +9,7 @@
 #include <opencv2/video/tracking.hpp>
 #include <PerFoRoControl/SelectTarget.h>
 #include <PerFoRoControl/MODE.h>
+#include <person_tracking/TrackedObject.h>
 
 using namespace cv;
 using namespace std;
@@ -34,6 +35,7 @@ protected:
 	image_transport::ImageTransport it_;
 	image_transport::Subscriber image_sub_;
 	image_transport::Publisher image_shirt_pub_;
+	ros::Publisher track_shirt_pub_;
 	ros::Subscriber target_shirt_sub_;
 	ros::Subscriber mode_sub_;
 
@@ -57,6 +59,7 @@ protected:
 	Point kalmanEstimatePt;
 	bool selectObject;
 	int navX, navY, prevmsg = 1, PerFoRoMode = 0;
+	person_tracking::TrackedObject shirt_msg;
 
 	void 	drawArrow(Mat image, Point p, Point q, Scalar color, int arrowMagnitude, int thickness, int line_type, int shift);
 	void	ImageCallback(const sensor_msgs::ImageConstPtr& msg);
