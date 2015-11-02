@@ -11,7 +11,7 @@ TrackPant::TrackPant() :
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &TrackPant::ImageCallback, this);
 	target_pant_sub_ = nh_.subscribe("/SelectTargetPantPerFoRo", 1, &TrackPant::SelectTargetPantCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &TrackPant::ModeCallback, this);
-	track_pant_pub_ = nh_.advertise<person_tracking::TrackedObject>("/track_pant/tracked_pant", 2);
+	track_pant_pub_ = nh_.advertise<person_tracking::TrackedObject>("/track_pant/tracked_pant", 10);
 	image_pant_pub_ = it_.advertise("/track_pant/image_raw", 1);
 
 	structure_elem = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));

@@ -8,10 +8,10 @@ NavigatePerFoRo::NavigatePerFoRo() :
 	it_(nh_)
 {
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &NavigatePerFoRo::ImageCallback, this);
-	tracked_shirt_sub_ = nh_.subscribe("/track_shirt/tracked_shirt", 2, &NavigatePerFoRo::TrackedShirtCallback, this);
-	tracked_pant_sub_ = nh_.subscribe("/track_pant/tracked_pant", 2, &NavigatePerFoRo::TrackedPantCallback, this);
+	tracked_shirt_sub_ = nh_.subscribe("/track_shirt/tracked_shirt", 10, &NavigatePerFoRo::TrackedShirtCallback, this);
+	tracked_pant_sub_ = nh_.subscribe("/track_pant/tracked_pant", 10, &NavigatePerFoRo::TrackedPantCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &NavigatePerFoRo::ModeCallback, this);
-	navigate_pub_ = nh_.advertise<PerFoRoControl::NavigatePerFoRo>("/NavigatePerFoRo", 1);
+	navigate_pub_ = nh_.advertise<PerFoRoControl::NavigatePerFoRo>("/NavigatePerFoRo", 2);
 	image_pub_ = it_.advertise("/object_tracking/image_raw", 1);
 }
 

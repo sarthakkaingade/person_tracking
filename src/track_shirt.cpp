@@ -11,7 +11,7 @@ TrackShirt::TrackShirt() :
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &TrackShirt::ImageCallback, this);
 	target_shirt_sub_ = nh_.subscribe("/SelectTargetShirtPerFoRo", 1, &TrackShirt::SelectTargetShirtCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &TrackShirt::ModeCallback, this);
-	track_shirt_pub_ = nh_.advertise<person_tracking::TrackedObject>("/track_shirt/tracked_shirt", 2);
+	track_shirt_pub_ = nh_.advertise<person_tracking::TrackedObject>("/track_shirt/tracked_shirt", 10);
 	image_shirt_pub_ = it_.advertise("/track_shirt/image_raw", 1);
 
 	structure_elem = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
