@@ -21,7 +21,7 @@ TrackPant::TrackPant() :
 	elemDilate = getStructuringElement( MORPH_ELLIPSE, Size( 2*dilation_size + 1, 2*dilation_size+1 ), Point( dilation_size, dilation_size ) );
 	elemErode = getStructuringElement( MORPH_ELLIPSE, Size( 2*erosion_size + 1, 2*erosion_size+1 ), Point( erosion_size, erosion_size ) );
 
-	IMSHOW = true;
+	IMSHOW = false;
 	trackObject = -1;
 	rectOffset = 5;
 	minDistThresh = 0.1;
@@ -31,7 +31,7 @@ TrackPant::TrackPant() :
 	mColorRadius = Scalar(20,50,70,0);
 	mUpperBound = Scalar(0);
 	mLowerBound = Scalar(0);
-	cv::namedWindow(OPENCV_WINDOW);
+	//cv::namedWindow(OPENCV_WINDOW);
 }
 
 void TrackPant::drawArrow(Mat image, Point p, Point q, Scalar color, int arrowMagnitude=9 , int thickness=2, int line_type=8, int shift=0)
@@ -123,11 +123,11 @@ void TrackPant::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		ros::requestShutdown();
 	} else if ( key =='z' )	{
 		IMSHOW = true;
-		namedWindow(OPENCV_WINDOW);
+		//namedWindow(OPENCV_WINDOW);
 	} else if (key == 'x')	{
 		IMSHOW =  false;
 		cvDestroyAllWindows() ;
-		namedWindow(OPENCV_WINDOW);
+		//namedWindow(OPENCV_WINDOW);
 	}
 
 	if (trackObject == -1)	{
@@ -261,10 +261,10 @@ void TrackPant::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		}
 	}
 	// Update GUI Window
-	if (IMSHOW)	{
-		imshow(OPENCV_WINDOW, frame);
+	//if (IMSHOW)	{
+	//	imshow(OPENCV_WINDOW, frame);
 		///imshow("Binary Image with Detected Object", imgThresh);
-	}
+	//}
 	//cv::waitKey(3);
 
 	// Output modified video stream

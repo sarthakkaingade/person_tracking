@@ -12,10 +12,10 @@ SelectTarget::SelectTarget() :
 	target_shirt_pub_ = nh_.advertise<PerFoRoControl::SelectTarget>("/SelectTargetShirtPerFoRo", 1);
 	target_pant_pub_ = nh_.advertise<PerFoRoControl::SelectTarget>("/SelectTargetPantPerFoRo", 1);
 
-	IMSHOW = true;
+	IMSHOW = false;
 	
 	selectObject = false;
-	cv::namedWindow(OPENCV_WINDOW);
+	//cv::namedWindow(OPENCV_WINDOW);
 }
 
 void SelectTarget::SelectTargetCallback(const PerFoRoControl::SelectTarget msg)
@@ -56,19 +56,19 @@ void SelectTarget::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		ros::requestShutdown();
 	} else if ( key =='z' )	{
 		IMSHOW = true;
-		namedWindow(OPENCV_WINDOW);
-		setMouseCallback(OPENCV_WINDOW, onMouse, NULL); 
+		//namedWindow(OPENCV_WINDOW);
+		//setMouseCallback(OPENCV_WINDOW, onMouse, NULL); 
 	} else if (key == 'x')	{
 		IMSHOW =  false;
 		cvDestroyAllWindows() ;
-		namedWindow(OPENCV_WINDOW);
+		//namedWindow(OPENCV_WINDOW);
 	}
 
 	// Update GUI Window
-	if (IMSHOW)	{
-		imshow(OPENCV_WINDOW, frame);
+	//if (IMSHOW)	{
+	//	imshow(OPENCV_WINDOW, frame);
 		///imshow("Binary Image with Detected Object", imgThresh);
-	}
+	//}
 	//cv::waitKey(3);
 }    
 
