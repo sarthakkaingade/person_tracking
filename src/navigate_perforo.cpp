@@ -127,6 +127,9 @@ int main(int argc, char** argv)
 					NP.navigate();
 				}
 			}
+		} else	{
+			NP.shirt_updated = false;
+			NP.pant_updated = false;
 		}
 
 		ros::spinOnce();
