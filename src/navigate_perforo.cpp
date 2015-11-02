@@ -83,13 +83,18 @@ void NavigatePerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 void NavigatePerFoRo::navigate()
 {
 	PerFoRoControl::NavigatePerFoRo msg;
+	//cout<<"Shirt "<<TrackedShirt.x<<" "<<TrackedShirt.area<<" "<<AREA<<endl;
+	//cout<<"Pant "<<TrackedPant.x<<" "<<TrackedPant.area<<" "<<(TrackedShirt.area + TrackedPant.area)<<endl;
+	AreaRatio = (float)(TrackedShirt.area + TrackedPant.area) / (float)AREA;
+	cout.precision(5);
+	cout<<"R "<<fixed<<AreaRatio<<endl;
 	if ((TrackedShirt.x < (0.3 * Columns)) && (TrackedPant.x < (0.3 * Columns)))	{
 		//cout<<"Turn Left"<<endl;
 		msg.command = 3;
 	} else if ((TrackedShirt.x > (0.7 * Columns)) && (TrackedPant.x > (0.7 * Columns)))	{
 		//cout<<"Turn Right"<<endl;
 		msg.command = 4;
-	} else	if ( ((TrackedShirt.area + TrackedPant.area) / AREA) < 0.25 )	{
+	} else	if ( AreaRatio < 0.1f )	{
 		//cout<<"Go Front"<<endl;
 		msg.command = 1;
 	} else	{

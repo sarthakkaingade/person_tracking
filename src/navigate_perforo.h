@@ -48,6 +48,7 @@ protected:
 	Mat frame;
 	Point shirt,pant;
 	bool selectObject;
+	double AreaRatio = 1.0f;
 	int prevmsg = 2, Rows = 240, Columns = 320, AREA = Rows * Columns, interval = 50;
 	person_tracking::TrackedObject TrackedShirt, TrackedPant;
 	
