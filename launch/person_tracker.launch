@@ -7,4 +7,5 @@
 
 	<node pkg="person_tracking" name="select_target" type="select_target" output="screen"/>
 	<node pkg="person_tracking" name="track_shirt" type="track_shirt" output="screen"/>
+	<node pkg="person_tracking" name="track_pant" type="track_pant" output="screen"/>
 </launch>
