@@ -9,4 +9,5 @@
 	<node pkg="person_tracking" name="track_shirt" type="track_shirt" output="screen"/>
 	<node pkg="person_tracking" name="track_pant" type="track_pant" output="screen"/>
 	<node pkg="person_tracking" name="navigate_perforo" type="navigate_perforo" output="screen"/>
+	<node pkg="web_video_server" name="web_video_server" type="web_video_server" output="screen"/>
 </launch>
