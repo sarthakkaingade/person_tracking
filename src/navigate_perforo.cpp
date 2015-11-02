@@ -73,7 +73,7 @@ void NavigatePerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 	if (pant_updated)	{
 		pant.x = TrackedPant.x;
 		pant.y = TrackedPant.y;
-		drawArrow(frame, cv::Point(frame.cols/2, frame.rows/2), pant, Scalar(255,0,0));
+		drawArrow(frame, cv::Point(frame.cols/2, frame.rows/2), pant, Scalar(0,255,0));
 	}
 
 	// Output modified video stream
