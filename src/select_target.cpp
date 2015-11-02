@@ -24,6 +24,16 @@ void SelectTarget::SelectTargetCallback(const PerFoRoControl::SelectTarget msg)
 	selection.y = msg.y;
 	selection.width = msg.width;
 	selection.height = msg.height;
+	select_target_shirt_msg.x = selection.x + (selection.width/4);
+	select_target_shirt_msg.y = selection.y;
+	select_target_shirt_msg.width = selection.width/4;
+	select_target_shirt_msg.height = selection.height/4;
+	target_shirt_pub_.publish(select_target_shirt_msg);
+	select_target_pant_msg.x = selection.x + (selection.width/4);
+	select_target_pant_msg.y = selection.y + (3*selection.height/4);
+	select_target_pant_msg.width = selection.width/4;
+	select_target_pant_msg.height = selection.height/4;
+	target_pant_pub_.publish(select_target_pant_msg);
 }
 
 void SelectTarget::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
