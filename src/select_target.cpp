@@ -10,6 +10,7 @@ SelectTarget::SelectTarget() :
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &SelectTarget::ImageCallback, this);
 	target_sub_ = nh_.subscribe("/SelectTargetPerFoRo", 1, &SelectTarget::SelectTargetCallback, this);
 	target_shirt_pub_ = nh_.advertise<PerFoRoControl::SelectTarget>("/SelectTargetShirtPerFoRo", 1);
+	target_pant_pub_ = nh_.advertise<PerFoRoControl::SelectTarget>("/SelectTargetPantPerFoRo", 1);
 
 	IMSHOW = true;
 	
@@ -86,11 +87,16 @@ void SelectTarget::SelectObject(int event, int x, int y)
 
 		case CV_EVENT_LBUTTONUP:
 		{
-			select_target_shirt_msg.x = selection.x;
+			select_target_shirt_msg.x = selection.x + (selection.width/4);
 			select_target_shirt_msg.y = selection.y;
-			select_target_shirt_msg.width = selection.width;
-			select_target_shirt_msg.height = selection.height;
+			select_target_shirt_msg.width = selection.width/4;
+			select_target_shirt_msg.height = selection.height/4;
 			target_shirt_pub_.publish(select_target_shirt_msg);
+			select_target_pant_msg.x = selection.x + (selection.width/4);
+			select_target_pant_msg.y = selection.y + (3*selection.height/4);
+			select_target_pant_msg.width = selection.width/4;
+			select_target_pant_msg.height = selection.height/4;
+			target_pant_pub_.publish(select_target_pant_msg);
 			break;
 		}
 	}
