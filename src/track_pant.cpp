@@ -134,7 +134,7 @@ void TrackPant::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		//Initial stage, before selecting object. Do nothing. Camera view shown as is.
 	} else if (trackObject == 0)	{
 		rectangle(frame, Point(selection.x,selection.y),Point(selection.x+selection.width,selection.y+selection.height),Scalar(0,0,255),1);
-	} else if (PerFoRoMode == 0)	{
+	} else if (PerFoRoMode == 3)	{
 		Mat imgHSV, imgThresh, binFrame;
 		int contSize;
 

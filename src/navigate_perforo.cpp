@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 	ros::Rate loop_rate(10);
 	while (ros::ok())
   	{
-		if (NP.PerFoRoMode == 0)	{
+		if (NP.PerFoRoMode == 3)	{
 			if (NP.shirt_updated && NP.pant_updated)	{
 				NP.shirt_updated = false;
 				NP.pant_updated = false;
