@@ -17,3 +17,7 @@ add_dependencies(select_target select_target_generate_messages_cpp)
 add_executable(track_shirt src/track_shirt.cpp)
 target_link_libraries(track_shirt ${catkin_LIBRARIES})
 add_dependencies(track_shirt track_shirt_generate_messages_cpp)
+
+add_executable(track_pant src/track_pant.cpp)
+target_link_libraries(track_pant ${catkin_LIBRARIES})
+add_dependencies(track_pant track_pant_generate_messages_cpp)
