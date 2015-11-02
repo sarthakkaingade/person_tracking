@@ -4,6 +4,18 @@ project(person_tracking)
 ## Find catkin and any catkin packages
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg sensor_msgs cv_bridge image_transport)
 
+## Add message files
+add_message_files(
+  FILES
+  TrackedObject.msg
+)
+
+## Generate message files
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
+
 ## Declare a catkin package
 catkin_package()
 
