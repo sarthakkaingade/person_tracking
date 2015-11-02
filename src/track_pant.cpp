@@ -11,6 +11,7 @@ TrackPant::TrackPant() :
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &TrackPant::ImageCallback, this);
 	target_pant_sub_ = nh_.subscribe("/SelectTargetPantPerFoRo", 1, &TrackPant::SelectTargetPantCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &TrackPant::ModeCallback, this);
+	track_pant_pub_ = nh_.advertise<person_tracking::TrackedObject>("/track_pant/tracked_pant", 1);
 	image_pant_pub_ = it_.advertise("/track_pant/image_raw", 1);
 
 	structure_elem = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
@@ -246,9 +247,11 @@ void TrackPant::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 			if (IMSHOW)	{ 
 				rectangle( frame, boundRect[sortedSelect.at<int>(0)], Scalar(255,255,255), 2, 8, 0 );
 			}  
-			navX = selectCentroid.x;
-			navY = selectCentroid.y;
-			cout<<"X="<<navX<<"Y="<<navY<<endl; 
+			pant_msg.x = selectCentroid.x;
+			pant_msg.y = selectCentroid.y;
+			pant_msg.area = boundRect[sortedSelect.at<int>(0)].width * boundRect[sortedSelect.at<int>(0)].height;
+			track_pant_pub_.publish(pant_msg);
+			//cout<<"X="<<navX<<"Y="<<navY<<endl; 
 			missCount = 0;
 			drawArrow(frame, cv::Point(frame.cols/2, frame.rows/2), selectCentroid, Scalar(255,0,0));
 		} else	{
