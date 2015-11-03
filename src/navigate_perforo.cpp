@@ -105,10 +105,10 @@ void NavigatePerFoRo::navigate(bool trueDetected)
 	} else	{
 		msg.command = 0;
 	}
-	if (prevmsg != msg.command)	{
+	//if (prevmsg != msg.command)	{
 		prevmsg = msg.command;
 		navigate_pub_.publish(msg);
-	}
+	//}
 }
 
 bool NavigatePerFoRo::ifvertical()
