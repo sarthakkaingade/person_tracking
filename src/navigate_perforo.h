@@ -25,7 +25,7 @@ public:
 	bool pant_updated;
 	int PerFoRoMode = 0;
 
-	void 	navigate();
+	void 	navigate(bool trueDetected);
 	bool 	ifvertical();
 
 protected:
