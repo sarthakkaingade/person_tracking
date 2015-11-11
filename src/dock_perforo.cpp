@@ -57,7 +57,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		namedWindow(OPENCV_WINDOW);
 	}
 
-	if (trackObject == 1)	{
+	if ((trackObject == 1) && (PerFoRoMode == 4))	{
 		Mat imgHSV, binFrame, imgThresh;
  
 		cvtColor(frame, imgHSV, CV_BGR2HSV); 
@@ -71,7 +71,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		dilate( imgThresh, imgThresh, elemDilate );                               
 		erode( imgThresh, imgThresh, elemErode );                                                       
 		morphologyEx(imgThresh, imgThresh, MORPH_OPEN, structure_elem);
-
+		//imshow("Binary Image with Detected Object", imgThresh);
 		// Find contours
 		imgThresh.copyTo(binFrame);
 		vector<vector<Point> > contours;
@@ -96,6 +96,8 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 					rectangle( frame, r, Scalar(255,255,255), 2, 8, 0 );
 			}
 		}
+		// Output modified video stream
+		image_dock_pub_.publish(cv_ptr->toImageMsg());
 	}
 	// Update GUI Window
 	if (IMSHOW)	{
@@ -103,9 +105,6 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		///imshow("Binary Image with Detected Object", imgThresh);
 	}
 	//cv::waitKey(3);
-
-	// Output modified video stream
-	image_dock_pub_.publish(cv_ptr->toImageMsg());
 }
 
 void DockPerFoRo::SelectObject(int event, int x, int y)
