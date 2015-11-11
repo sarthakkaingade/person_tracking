@@ -52,7 +52,7 @@ protected:
 	Scalar mUpperBound;
 	Point selectCentroid, selectCenter, origin;
 	bool selectObject;
-	int navX, navY, prevmsg = 1, PerFoRoMode = 4;
+	int navX, navY, prevmsg = 1, PerFoRoMode = 0;
 
 	void	ImageCallback(const sensor_msgs::ImageConstPtr& msg);
 	void 	ModeCallback(const PerFoRoControl::MODE msg);
