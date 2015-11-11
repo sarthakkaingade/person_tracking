@@ -8,6 +8,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/tracking.hpp>
 #include <PerFoRoControl/MODE.h>
+#include <PerFoRoControl/SelectTarget.h>
 
 using namespace cv;
 using namespace std;
@@ -36,6 +37,7 @@ protected:
 	image_transport::Subscriber image_sub_;
 	image_transport::Publisher image_dock_pub_;
 	ros::Subscriber mode_sub_;
+	ros::Subscriber target_dock_sub_;
 
 	Mat frame;
 	bool IMSHOW;
@@ -54,6 +56,7 @@ protected:
 
 	void	ImageCallback(const sensor_msgs::ImageConstPtr& msg);
 	void 	ModeCallback(const PerFoRoControl::MODE msg);
+	void 	SelectTargetDockCallback(const PerFoRoControl::SelectTarget msg);
 };
 
 namespace dp

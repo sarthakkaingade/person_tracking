@@ -7,8 +7,9 @@
 DockPerFoRo::DockPerFoRo() : 
 	it_(nh_)
 {
-	image_sub_ = it_.subscribe("/usb_cam/image_raw", 1, &DockPerFoRo::ImageCallback, this);
+	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &DockPerFoRo::ImageCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &DockPerFoRo::ModeCallback, this);
+	target_dock_sub_ = nh_.subscribe("/SelectTargetDockPerFoRo", 1, &DockPerFoRo::SelectTargetDockCallback, this);
 	image_dock_pub_ = it_.advertise("/dock_perforo/image_raw", 1);
 
 	IMSHOW = true;
@@ -29,6 +30,48 @@ void DockPerFoRo::ModeCallback(const PerFoRoControl::MODE msg)
 	PerFoRoMode = msg.MODE;
 }
 
+void DockPerFoRo::SelectTargetDockCallback(const PerFoRoControl::SelectTarget msg)
+{
+	if (PerFoRoMode == 4)	{
+		Mat clickFrame = frame;
+		Mat roiHSV;
+		selection.x = msg.x;
+		selection.y = msg.y;
+		selection.width = msg.width;
+		selection.height = msg.height;
+
+		if( selection.width > 0 && selection.height > 0 )
+			trackObject = 1;
+
+		//defines roi
+		cv::Rect roi( selection.x, selection.y, selection.width, selection.height );
+
+		//copies input image in roi
+		cv::Mat image_roi = clickFrame(roi);
+
+		cvtColor(image_roi, roiHSV, CV_BGR2HSV);
+
+		//computes mean over roi
+		cv::Scalar hsvColor = cv::mean( roiHSV );
+		cout<<"hsv"<<hsvColor<<endl;
+
+		double minH = (hsvColor.val[0] >= mColorRadius.val[0]) ? hsvColor.val[0]-mColorRadius.val[0] : 0;
+		double maxH = (hsvColor.val[0]+mColorRadius.val[0] <= 179) ? hsvColor.val[0]+mColorRadius.val[0] : 179;
+
+		mLowerBound.val[0] = minH;
+		mUpperBound.val[0] = maxH;
+
+		mLowerBound.val[1] = hsvColor.val[1] - mColorRadius.val[1];
+		mUpperBound.val[1] = hsvColor.val[1] + mColorRadius.val[1];
+
+		mLowerBound.val[2] = hsvColor.val[2] - mColorRadius.val[2];
+		mUpperBound.val[2] = hsvColor.val[2] + mColorRadius.val[2];
+
+		mLowerBound.val[3] = 0;
+		mUpperBound.val[3] = 255;
+	}
+}
+
 void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 {
 	cv_bridge::CvImagePtr cv_ptr;
@@ -45,7 +88,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 	frame = cv_ptr->image;
 
 	char key = (char)cvWaitKey(10);
-	if (key ==27 )	{
+	if (key == 27 )	{
 		ros::requestShutdown();
 	} else if ( key =='z' )	{
 		IMSHOW = true;
