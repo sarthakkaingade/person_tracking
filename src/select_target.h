@@ -38,9 +38,11 @@ protected:
 	ros::Subscriber target_sub_;
 	ros::Publisher target_shirt_pub_;
 	ros::Publisher target_pant_pub_;
+	ros::Publisher target_dock_pub_;
 
 	PerFoRoControl::SelectTarget select_target_shirt_msg;
 	PerFoRoControl::SelectTarget select_target_pant_msg;
+	PerFoRoControl::SelectTarget select_target_dock_msg;
 	bool IMSHOW;
 	Rect selection;
 	bool selectObject;
