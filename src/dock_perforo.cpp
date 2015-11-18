@@ -11,9 +11,11 @@ DockPerFoRo::DockPerFoRo() :
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &DockPerFoRo::ModeCallback, this);
 	target_dock_sub_ = nh_.subscribe("/SelectTargetDockPerFoRo", 1, &DockPerFoRo::SelectTargetDockCallback, this);
 	image_dock_pub_ = it_.advertise("/object_tracking/image_raw", 1);
+	navigate_pub_ = nh_.advertise<PerFoRoControl::NavigatePerFoRo>("/NavigatePerFoRo", 2);
 
 	IMSHOW = false;
 	selectObject = false;
+	ObjectDetected = false;
 	trackObject = -1;
 	dilation_size = 1;
 	erosion_size = 1;
@@ -135,12 +137,20 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 				double area = contourArea(contours[i]);
 				Rect r = boundingRect(contours[i]);
 				int radius = r.width / 2;
-				if (abs(1 - ((double)r.width / r.height)) <= 0.2 && abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2)
+				if (abs(1 - ((double)r.width / r.height)) <= 0.2 && abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2)	{
 					rectangle( frame, r, Scalar(255,255,255), 2, 8, 0 );
+					ObjectDetected = true;
+					break;
+				}
 			}
+		}
+		if (ObjectDetected == false) 	{
+			RotatePerFoRo();
 		}
 		// Output modified video stream
 		image_dock_pub_.publish(cv_ptr->toImageMsg());
+	} else {
+		ObjectDetected = false;
 	}
 	// Update GUI Window
 	if (IMSHOW)	{
@@ -148,6 +158,17 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		///imshow("Binary Image with Detected Object", imgThresh);
 	}
 	//cv::waitKey(3);
+}
+
+void DockPerFoRo::RotatePerFoRo()
+{
+	PerFoRoControl::NavigatePerFoRo msg;
+	msg.command = 3;
+	navigate_pub_.publish(msg);
+	ros::Duration(1).sleep();
+	msg.command = 5;
+	navigate_pub_.publish(msg);
+	ros::Duration(1).sleep();
 }
 
 void DockPerFoRo::SelectObject(int event, int x, int y)

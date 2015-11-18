@@ -9,6 +9,7 @@
 #include <opencv2/video/tracking.hpp>
 #include <PerFoRoControl/MODE.h>
 #include <PerFoRoControl/SelectTarget.h>
+#include <PerFoRoControl/NavigatePerFoRo.h>
 
 using namespace cv;
 using namespace std;
@@ -38,6 +39,7 @@ protected:
 	image_transport::Publisher image_dock_pub_;
 	ros::Subscriber mode_sub_;
 	ros::Subscriber target_dock_sub_;
+	ros::Publisher navigate_pub_;
 
 	Mat frame;
 	bool IMSHOW;
@@ -51,12 +53,13 @@ protected:
 	Scalar mLowerBound;
 	Scalar mUpperBound;
 	Point selectCentroid, selectCenter, origin;
-	bool selectObject;
+	bool selectObject, ObjectDetected;
 	int navX, navY, prevmsg = 1, PerFoRoMode = 0;
 
 	void	ImageCallback(const sensor_msgs::ImageConstPtr& msg);
 	void 	ModeCallback(const PerFoRoControl::MODE msg);
 	void 	SelectTargetDockCallback(const PerFoRoControl::SelectTarget msg);
+	void 	RotatePerFoRo();
 };
 
 namespace dp
