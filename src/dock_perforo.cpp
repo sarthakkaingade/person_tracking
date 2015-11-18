@@ -10,9 +10,9 @@ DockPerFoRo::DockPerFoRo() :
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &DockPerFoRo::ImageCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &DockPerFoRo::ModeCallback, this);
 	target_dock_sub_ = nh_.subscribe("/SelectTargetDockPerFoRo", 1, &DockPerFoRo::SelectTargetDockCallback, this);
-	image_dock_pub_ = it_.advertise("/dock_perforo/image_raw", 1);
+	image_dock_pub_ = it_.advertise("/object_tracking/image_raw", 1);
 
-	IMSHOW = true;
+	IMSHOW = false;
 	selectObject = false;
 	trackObject = -1;
 	dilation_size = 1;
@@ -22,7 +22,7 @@ DockPerFoRo::DockPerFoRo() :
 	mColorRadius = Scalar(10,100,100,0);
 	mUpperBound = Scalar(0);
 	mLowerBound = Scalar(0);
-	cv::namedWindow(OPENCV_WINDOW);
+//	cv::namedWindow(OPENCV_WINDOW);
 }
 
 void DockPerFoRo::ModeCallback(const PerFoRoControl::MODE msg)
@@ -53,7 +53,7 @@ void DockPerFoRo::SelectTargetDockCallback(const PerFoRoControl::SelectTarget ms
 
 		//computes mean over roi
 		cv::Scalar hsvColor = cv::mean( roiHSV );
-		cout<<"hsv"<<hsvColor<<endl;
+		cout<<"Dock hsv"<<hsvColor<<endl;
 
 		double minH = (hsvColor.val[0] >= mColorRadius.val[0]) ? hsvColor.val[0]-mColorRadius.val[0] : 0;
 		double maxH = (hsvColor.val[0]+mColorRadius.val[0] <= 179) ? hsvColor.val[0]+mColorRadius.val[0] : 179;
