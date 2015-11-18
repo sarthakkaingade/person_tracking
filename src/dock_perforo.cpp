@@ -150,11 +150,14 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 				}
 			}
 		}
-		if ((ObjectDetected == false) && (imgcount == 10))	{
-			RotatePerFoRo();
-			imgcount = 0;
+		if (ObjectDetected == false)	{
+			if (imgcount == 10)	{
+				RotatePerFoRo();
+				imgcount = 0;
+			}
+			imgcount++;
+			cout<<imgcount<<endl;
 		}
-		imgcount++;
 		// Output modified video stream
 		image_dock_pub_.publish(cv_ptr->toImageMsg());
 	} else {
