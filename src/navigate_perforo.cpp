@@ -77,6 +77,7 @@ void NavigatePerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 	}
 
 	// Output modified video stream
+	if (PerFoRoMode != 4)
 	image_pub_.publish(cv_ptr->toImageMsg());
 }
 
