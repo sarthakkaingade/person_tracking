@@ -142,8 +142,8 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 				if (abs(1 - ((double)r.width / r.height)) <= 0.2 && abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2)	{
 					rectangle( frame, r, Scalar(255,255,255), 2, 8, 0 );
 					ObjectDetected = true;
-					dock_msg.x = r.x;
-					dock_msg.y = r.y;
+					dock_msg.x = r.x + r.width/2;
+					dock_msg.y = r.y + r.height/2;
 					dock_msg.area = r.width * r.height;
 					track_dock_pub_.publish(dock_msg);
 					break;
