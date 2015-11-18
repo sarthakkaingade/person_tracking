@@ -10,6 +10,7 @@
 #include <PerFoRoControl/MODE.h>
 #include <PerFoRoControl/SelectTarget.h>
 #include <PerFoRoControl/NavigatePerFoRo.h>
+#include <person_tracking/TrackedObject.h>
 
 using namespace cv;
 using namespace std;
@@ -39,6 +40,7 @@ protected:
 	image_transport::Publisher image_dock_pub_;
 	ros::Subscriber mode_sub_;
 	ros::Subscriber target_dock_sub_;
+	ros::Publisher track_dock_pub_;
 	ros::Publisher navigate_pub_;
 
 	Mat frame;
@@ -54,7 +56,8 @@ protected:
 	Scalar mUpperBound;
 	Point selectCentroid, selectCenter, origin;
 	bool selectObject, ObjectDetected;
-	int navX, navY, prevmsg = 1, PerFoRoMode = 0;
+	int navX, navY, prevmsg = 1, PerFoRoMode = 0, imgcount;
+	person_tracking::TrackedObject dock_msg;
 
 	void	ImageCallback(const sensor_msgs::ImageConstPtr& msg);
 	void 	ModeCallback(const PerFoRoControl::MODE msg);

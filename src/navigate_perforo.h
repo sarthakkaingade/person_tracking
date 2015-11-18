@@ -23,6 +23,7 @@ public:
 
 	bool shirt_updated;
 	bool pant_updated;
+	bool dock_updated;
 	int PerFoRoMode = 0;
 
 	void 	navigate(bool trueDetected);
@@ -42,20 +43,22 @@ protected:
 	image_transport::Publisher image_pub_;
 	ros::Subscriber tracked_shirt_sub_;
 	ros::Subscriber tracked_pant_sub_;
+	ros::Subscriber tracked_dock_sub_;
 	ros::Subscriber mode_sub_;
 	ros::Publisher navigate_pub_;
 
 	Mat frame;
-	Point shirt,pant;
+	Point shirt,pant,dock;
 	bool selectObject;
 	double AreaRatio = 1.0f;
 	int prevmsg = 2, Rows = 240, Columns = 320, AREA = Rows * Columns, interval = 50;
-	person_tracking::TrackedObject TrackedShirt, TrackedPant;
+	person_tracking::TrackedObject TrackedShirt, TrackedPant, TrackedDock;
 	
 
 	void 	drawArrow(Mat image, Point p, Point q, Scalar color, int arrowMagnitude, int thickness, int line_type, int shift);
 	void	ImageCallback(const sensor_msgs::ImageConstPtr& msg);
 	void 	TrackedShirtCallback(const person_tracking::TrackedObject msg);
 	void 	TrackedPantCallback(const person_tracking::TrackedObject msg);
+	void 	TrackedDockCallback(const person_tracking::TrackedObject msg);
 	void 	ModeCallback(const PerFoRoControl::MODE msg);
 };

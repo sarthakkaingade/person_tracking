@@ -10,12 +10,14 @@ DockPerFoRo::DockPerFoRo() :
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &DockPerFoRo::ImageCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &DockPerFoRo::ModeCallback, this);
 	target_dock_sub_ = nh_.subscribe("/SelectTargetDockPerFoRo", 1, &DockPerFoRo::SelectTargetDockCallback, this);
-	image_dock_pub_ = it_.advertise("/object_tracking/image_raw", 1);
+	image_dock_pub_ = it_.advertise("/dock_perforo/image_raw", 1);
+	track_dock_pub_ = nh_.advertise<person_tracking::TrackedObject>("/track_dock/tracked_dock", 10);
 	navigate_pub_ = nh_.advertise<PerFoRoControl::NavigatePerFoRo>("/NavigatePerFoRo", 2);
 
 	IMSHOW = false;
 	selectObject = false;
 	ObjectDetected = false;
+	imgcount = 0;
 	trackObject = -1;
 	dilation_size = 1;
 	erosion_size = 1;
@@ -140,17 +142,24 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 				if (abs(1 - ((double)r.width / r.height)) <= 0.2 && abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2)	{
 					rectangle( frame, r, Scalar(255,255,255), 2, 8, 0 );
 					ObjectDetected = true;
+					dock_msg.x = r.x;
+					dock_msg.y = r.y;
+					dock_msg.area = r.width * r.height;
+					track_dock_pub_.publish(dock_msg);
 					break;
 				}
 			}
 		}
-		if (ObjectDetected == false) 	{
+		if ((ObjectDetected == false) && (imgcount == 10))	{
 			RotatePerFoRo();
+			imgcount = 0;
 		}
+		imgcount++;
 		// Output modified video stream
 		image_dock_pub_.publish(cv_ptr->toImageMsg());
 	} else {
 		ObjectDetected = false;
+		imgcount = 0;
 	}
 	// Update GUI Window
 	if (IMSHOW)	{

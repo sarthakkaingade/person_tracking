@@ -10,6 +10,7 @@ NavigatePerFoRo::NavigatePerFoRo() :
 	image_sub_ = it_.subscribe("/ps3_eye/image_raw", 1, &NavigatePerFoRo::ImageCallback, this);
 	tracked_shirt_sub_ = nh_.subscribe("/track_shirt/tracked_shirt", 10, &NavigatePerFoRo::TrackedShirtCallback, this);
 	tracked_pant_sub_ = nh_.subscribe("/track_pant/tracked_pant", 10, &NavigatePerFoRo::TrackedPantCallback, this);
+	tracked_dock_sub_ = nh_.subscribe("/track_dock/tracked_dock", 10, &NavigatePerFoRo::TrackedDockCallback, this);
 	mode_sub_ = nh_.subscribe("/ModePerFoRo", 1, &NavigatePerFoRo::ModeCallback, this);
 	navigate_pub_ = nh_.advertise<PerFoRoControl::NavigatePerFoRo>("/NavigatePerFoRo", 2);
 	image_pub_ = it_.advertise("/object_tracking/image_raw", 1);
@@ -46,6 +47,12 @@ void NavigatePerFoRo::TrackedPantCallback(const person_tracking::TrackedObject m
 	pant_updated = true;
 }
 
+void NavigatePerFoRo::TrackedDockCallback(const person_tracking::TrackedObject msg)
+{
+	TrackedDock = msg;
+	dock_updated = true;
+}
+
 void NavigatePerFoRo::ModeCallback(const PerFoRoControl::MODE msg)
 {
 	PerFoRoMode = msg.MODE;
@@ -75,9 +82,13 @@ void NavigatePerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		pant.y = TrackedPant.y;
 		drawArrow(frame, cv::Point(frame.cols/2, frame.rows/2), pant, Scalar(0,255,0));
 	}
+	if (dock_updated)	{
+		dock.x = TrackedDock.x;
+		dock.y = TrackedDock.y;
+		drawArrow(frame, cv::Point(frame.cols/2, frame.rows/2), dock, Scalar(0,255,0));
+	}
 
 	// Output modified video stream
-	if (PerFoRoMode != 4)
 	image_pub_.publish(cv_ptr->toImageMsg());
 }
 
@@ -140,6 +151,7 @@ int main(int argc, char** argv)
 		} else	{
 			NP.shirt_updated = false;
 			NP.pant_updated = false;
+			NP.dock_updated = false;
 		}
 
 		ros::spinOnce();
