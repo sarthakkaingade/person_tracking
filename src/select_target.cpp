@@ -11,6 +11,7 @@ SelectTarget::SelectTarget() :
 	target_sub_ = nh_.subscribe("/SelectTargetPerFoRo", 1, &SelectTarget::SelectTargetCallback, this);
 	target_shirt_pub_ = nh_.advertise<PerFoRoControl::SelectTarget>("/SelectTargetShirtPerFoRo", 1);
 	target_pant_pub_ = nh_.advertise<PerFoRoControl::SelectTarget>("/SelectTargetPantPerFoRo", 1);
+	target_dock_pub_ = nh_.advertise<PerFoRoControl::SelectTarget>("/SelectTargetDockPerFoRo", 1);
 
 	IMSHOW = false;
 	
@@ -34,6 +35,11 @@ void SelectTarget::SelectTargetCallback(const PerFoRoControl::SelectTarget msg)
 	select_target_pant_msg.width = selection.width/4;
 	select_target_pant_msg.height = selection.height/4;
 	target_pant_pub_.publish(select_target_pant_msg);
+	select_target_dock_msg.x = selection.x;
+	select_target_dock_msg.y = selection.y;
+	select_target_dock_msg.width = selection.width;
+	select_target_dock_msg.height = selection.height;
+	target_dock_pub_.publish(select_target_dock_msg);
 }
 
 void SelectTarget::ImageCallback(const sensor_msgs::ImageConstPtr& msg)

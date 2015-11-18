@@ -37,3 +37,7 @@ add_dependencies(track_pant track_pant_generate_messages_cpp)
 add_executable(navigate_perforo src/navigate_perforo.cpp)
 target_link_libraries(navigate_perforo ${catkin_LIBRARIES})
 add_dependencies(navigate_perforo navigate_perforo_generate_messages_cpp)
+
+add_executable(dock_perforo src/dock_perforo.cpp)
+target_link_libraries(dock_perforo ${catkin_LIBRARIES})
+add_dependencies(dock_perforo dock_perforo_generate_messages_cpp)

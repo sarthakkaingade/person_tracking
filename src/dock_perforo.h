@@ -7,21 +7,21 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/tracking.hpp>
+#include <PerFoRoControl/MODE.h>
 #include <PerFoRoControl/SelectTarget.h>
 
 using namespace cv;
 using namespace std;
 
-static const std::string OPENCV_WINDOW = "Select Target Person";
+static const std::string OPENCV_WINDOW = "Dock PerFoRo Window";
 static void onMouse(int event, int x, int y, int, void* );
 
-class SelectTarget
+class DockPerFoRo
 {
 public:
-	SelectTarget();
+	DockPerFoRo();
 
-	~SelectTarget() {cv::destroyWindow(OPENCV_WINDOW);} 
-
+	~DockPerFoRo() {cv::destroyWindow(OPENCV_WINDOW);} 
 	void 	SelectObject(int event, int x, int y);
 
 protected:
@@ -35,25 +35,31 @@ protected:
 	ros::NodeHandle nh_;
 	image_transport::ImageTransport it_;
 	image_transport::Subscriber image_sub_;
-	ros::Subscriber target_sub_;
-	ros::Publisher target_shirt_pub_;
-	ros::Publisher target_pant_pub_;
-	ros::Publisher target_dock_pub_;
+	image_transport::Publisher image_dock_pub_;
+	ros::Subscriber mode_sub_;
+	ros::Subscriber target_dock_sub_;
 
-	PerFoRoControl::SelectTarget select_target_shirt_msg;
-	PerFoRoControl::SelectTarget select_target_pant_msg;
-	PerFoRoControl::SelectTarget select_target_dock_msg;
-	bool IMSHOW;
-	Rect selection;
-	bool selectObject;
 	Mat frame;
-	Point origin;
+	bool IMSHOW;
+	int trackObject;
+	int rectOffset;
+	int dilation_size, erosion_size;
+	Mat elemDilate, elemErode;
+	Mat structure_elem;
+	Rect selection;
+	Scalar mColorRadius;
+	Scalar mLowerBound;
+	Scalar mUpperBound;
+	Point selectCentroid, selectCenter, origin;
+	bool selectObject;
+	int navX, navY, prevmsg = 1, PerFoRoMode = 0;
 
 	void	ImageCallback(const sensor_msgs::ImageConstPtr& msg);
-	void 	SelectTargetCallback(const PerFoRoControl::SelectTarget msg);
+	void 	ModeCallback(const PerFoRoControl::MODE msg);
+	void 	SelectTargetDockCallback(const PerFoRoControl::SelectTarget msg);
 };
 
-namespace st
+namespace dp
 {
-    SelectTarget *ST = NULL;
+    DockPerFoRo *DP = NULL;
 }
