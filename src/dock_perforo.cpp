@@ -19,11 +19,11 @@ DockPerFoRo::DockPerFoRo() :
 	ObjectDetected = false;
 	imgcount = 0;
 	trackObject = -1;
-	dilation_size = 1;
-	erosion_size = 1;
+	dilation_size = 4;
+	erosion_size = 4;
 	elemDilate = getStructuringElement( MORPH_ELLIPSE, Size( 2*dilation_size + 1, 2*dilation_size+1 ), Point( dilation_size, dilation_size ) );
 	elemErode = getStructuringElement( MORPH_ELLIPSE, Size( 2*erosion_size + 1, 2*erosion_size+1 ), Point( erosion_size, erosion_size ) );
-	mColorRadius = Scalar(10,100,100,0);
+	mColorRadius = Scalar(10,50,70,0);
 	mUpperBound = Scalar(0);
 	mLowerBound = Scalar(0);
 //	cv::namedWindow(OPENCV_WINDOW);
@@ -123,7 +123,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 		imgThresh.copyTo(binFrame);
 		vector<vector<Point> > contours;
 		vector<Vec4i> hierarchy;
-			      
+
 		/// Find contours
 		findContours( binFrame, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 		vector<Point> approx;
@@ -139,7 +139,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 				double area = contourArea(contours[i]);
 				Rect r = boundingRect(contours[i]);
 				int radius = r.width / 2;
-				if (abs(1 - ((double)r.width / r.height)) <= 0.2 && abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2)	{
+				if (abs(1 - ((double)r.width / r.height)) <= 0.2 && abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2 && area >= 300)	{
 					rectangle( frame, r, Scalar(255,255,255), 2, 8, 0 );
 					ObjectDetected = true;
 					dock_msg.x = r.x + r.width/2;
@@ -151,7 +151,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 			}
 		}
 		if (ObjectDetected == false)	{
-			if (imgcount == 10)	{
+			if (imgcount == 100)	{
 				RotatePerFoRo();
 				imgcount = 0;
 			}
@@ -177,7 +177,7 @@ void DockPerFoRo::RotatePerFoRo()
 	PerFoRoControl::NavigatePerFoRo msg;
 	msg.command = 3;
 	navigate_pub_.publish(msg);
-	ros::Duration(1).sleep();
+	ros::Duration(0.5).sleep();
 	msg.command = 5;
 	navigate_pub_.publish(msg);
 	ros::Duration(1).sleep();
