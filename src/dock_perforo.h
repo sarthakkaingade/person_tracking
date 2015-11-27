@@ -56,13 +56,14 @@ protected:
 	Scalar mUpperBound;
 	Point selectCentroid, selectCenter, origin;
 	bool selectObject, ObjectDetected;
-	int navX, navY, prevmsg = 1, PerFoRoMode = 0, imgcount;
+	int navX, navY, prevmsg = 1, PerFoRoMode = 0, imgcount, Rows = 240, Columns = 320;
 	person_tracking::TrackedObject dock_msg;
 
 	void	ImageCallback(const sensor_msgs::ImageConstPtr& msg);
 	void 	ModeCallback(const PerFoRoControl::MODE msg);
 	void 	SelectTargetDockCallback(const PerFoRoControl::SelectTarget msg);
 	void 	RotatePerFoRo();
+	void	dock_perforo(int x, int y, int area);
 };
 
 namespace dp

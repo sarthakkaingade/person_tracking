@@ -146,6 +146,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 					dock_msg.y = r.y + r.height/2;
 					dock_msg.area = r.width * r.height;
 					track_dock_pub_.publish(dock_msg);
+					dock_perforo(dock_msg.x,dock_msg.y,dock_msg.area);
 					break;
 				}
 			}
@@ -157,6 +158,9 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 			}
 			imgcount++;
 			cout<<imgcount<<endl;
+		} else if (ObjectDetected == true)	{
+			//	ObjectDetected = false;
+			//	dock_perforo(dock_msg.x,dock_msg.y,dock_msg.area);
 		}
 		// Output modified video stream
 		image_dock_pub_.publish(cv_ptr->toImageMsg());
@@ -172,6 +176,24 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 	//cv::waitKey(3);
 }
 
+void DockPerFoRo::dock_perforo(int x, int y, int area)
+{
+	PerFoRoControl::NavigatePerFoRo msg;
+	if (x < (0.3 * Columns))	{
+		msg.command = 3;
+	} else if (x > (0.7 * Columns))	{
+		msg.command = 4;
+	} else if (area > 15000)	{
+		msg.command = 0;
+	} else	{
+		msg.command = 1;
+	}
+	navigate_pub_.publish(msg);
+	ros::Duration(0.5).sleep();
+	msg.command = 5;
+	navigate_pub_.publish(msg);
+	ros::Duration(1).sleep();
+}
 void DockPerFoRo::RotatePerFoRo()
 {
 	PerFoRoControl::NavigatePerFoRo msg;
