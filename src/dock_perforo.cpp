@@ -148,11 +148,15 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 					track_dock_pub_.publish(dock_msg);
 					dock_perforo(dock_msg.x,dock_msg.y,dock_msg.area);
 					break;
+				} else	{
+					PerFoRoControl::NavigatePerFoRo msg;
+					msg.command = 5;
+					navigate_pub_.publish(msg);
 				}
 			}
 		}
 		if (ObjectDetected == false)	{
-			if (imgcount == 50)	{
+			if (imgcount == 20)	{
 				RotatePerFoRo();
 				imgcount = 0;
 			}
@@ -184,7 +188,7 @@ void DockPerFoRo::dock_perforo(int x, int y, int area)
 	} else if (x > (0.7 * Columns))	{
 		msg.command = 4;
 	} else if (area > 15000)	{
-		msg.command = 0;
+		msg.command = 5;
 	} else	{
 		msg.command = 1;
 	}
