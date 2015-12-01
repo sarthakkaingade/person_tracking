@@ -152,7 +152,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 			}
 		}
 		if (ObjectDetected == false)	{
-			if (imgcount == 100)	{
+			if (imgcount == 50)	{
 				RotatePerFoRo();
 				imgcount = 0;
 			}
@@ -189,10 +189,10 @@ void DockPerFoRo::dock_perforo(int x, int y, int area)
 		msg.command = 1;
 	}
 	navigate_pub_.publish(msg);
-	ros::Duration(0.5).sleep();
-	msg.command = 5;
-	navigate_pub_.publish(msg);
-	ros::Duration(1).sleep();
+	//ros::Duration(0.5).sleep();
+	//msg.command = 5;
+	//navigate_pub_.publish(msg);
+	//ros::Duration(0.5).sleep();
 }
 void DockPerFoRo::RotatePerFoRo()
 {
@@ -202,7 +202,7 @@ void DockPerFoRo::RotatePerFoRo()
 	ros::Duration(0.5).sleep();
 	msg.command = 5;
 	navigate_pub_.publish(msg);
-	ros::Duration(1).sleep();
+	//ros::Duration(0.5).sleep();
 }
 
 void DockPerFoRo::SelectObject(int event, int x, int y)
