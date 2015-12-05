@@ -147,6 +147,8 @@ int main(int argc, char** argv)
 				} else	{
 					NP.navigate(false);
 				}
+			} else	{
+				NP.navigate(false);
 			}
 		} else	{
 			NP.shirt_updated = false;
