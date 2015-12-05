@@ -139,7 +139,7 @@ void DockPerFoRo::ImageCallback(const sensor_msgs::ImageConstPtr& msg)
 				double area = contourArea(contours[i]);
 				Rect r = boundingRect(contours[i]);
 				int radius = r.width / 2;
-				if (abs(1 - ((double)r.width / r.height)) <= 0.2 && abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2 && area >= 300)	{
+				if (abs(1 - ((double)r.width / r.height)) <= 0.2 && abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2 && area >= 200)	{
 					rectangle( frame, r, Scalar(255,255,255), 2, 8, 0 );
 					ObjectDetected = true;
 					dock_msg.x = r.x + r.width/2;
